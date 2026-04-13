@@ -1,0 +1,107 @@
+<div class="chat-screen">
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <div class="doc-info">
+      <span class="doc-icon">📄</span>
+      <div>
+        <p class="doc-name">{{ document.name }}</p>
+        <p class="doc-meta">
+          {{ document.page_count }} pages · {{ document.chunk_count }} chunks
+          indexed
+        </p>
+      </div>
+    </div>
+    <button class="new-doc-btn" (click)="onNewDocument()">
+      + New Document
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages">
+    <div
+      class="message"
+      *ngFor="let message of messages"
+      [class.user]="message.type === 'user'"
+      [class.ai]="message.type === 'ai'"
+    >
+      <div class="avatar">
+        <span *ngIf="message.type === 'user'">👤</span>
+        <span *ngIf="message.type === 'ai'">🤖</span>
+      </div>
+
+      <div class="bubble-wrapper">
+        <div class="bubble">{{ message.content }}</div>
+
+        <!-- Sources -->
+        <div
+          class="sources"
+          *ngIf="message.sources && message.sources.length > 0"
+        >
+          <span class="sources-label">📍 Sources:</span>
+          <span
+            class="source-tag"
+            *ngFor="let source of message.sources"
+            [title]="source.excerpt"
+          >
+            Page {{ source.page }}
+          </span>
+        </div>
+
+        <p class="time">{{ formatTime(message.timestamp) }}</p>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="message ai" *ngIf="isLoading">
+      <div class="avatar">🤖</div>
+      <div class="bubble-wrapper">
+        <div class="bubble typing"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="error" *ngIf="error">⚠️ {{ error }}</div>
+
+  <!-- Suggestion Chips — show only at start -->
+  <div class="suggestions" *ngIf="messages.length === 1">
+    <button
+      class="chip"
+      (click)="question = 'What is this document about?'; askQuestion()"
+    >
+      What is this about?
+    </button>
+    <button
+      class="chip"
+      (click)="question = 'Summarise the key points'; askQuestion()"
+    >
+      Key points
+    </button>
+    <button
+      class="chip"
+      (click)="question = 'What are the main topics?'; askQuestion()"
+    >
+      Main topics
+    </button>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <textarea
+      [(ngModel)]="question"
+      (keydown)="onKeyDown($event)"
+      placeholder="Ask anything about your document... (Enter to send)"
+      [disabled]="isLoading"
+      rows="1"
+    >
+    </textarea>
+    <button
+      class="send-btn"
+      (click)="askQuestion()"
+      [disabled]="!question.trim() || isLoading"
+    >
+      <span *ngIf="!isLoading">➤</span>
+      <div class="spinner" *ngIf="isLoading"></div>
+    </button>
+  </div>
+</div>

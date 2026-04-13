@@ -1,13 +1,25 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule, NgIf } from '@angular/common';
+import { UploadComponent } from './components/upload/upload.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { DocumentModel } from './models/document.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [UploadComponent, ChatComponent, CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'doc_qa_frontend';
+  uploadedDocument:DocumentModel | null = null;
+
+  onDocumentUploaded(document: DocumentModel) {
+    this.uploadedDocument = document;
+  }
+
+  onNewDocument() {
+    this.uploadedDocument = null;
+  }
 }

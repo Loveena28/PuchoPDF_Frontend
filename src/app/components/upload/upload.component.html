@@ -1,0 +1,59 @@
+<div class="upload-screen">
+  <div class="upload-card">
+    <div class="upload-header">
+      <span class="upload-emoji">🤖</span>
+      <h1 class="upload-title">Ask Your Documents</h1>
+      <p class="upload-subtitle">
+        Upload any PDF and ask questions in natural language.
+        Get instant AI-powered answers with source citations.
+      </p>
+    </div>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone" [class.dragging]="isDragging" [class.uploading]="isUploading" (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+
+      <!-- Normal State -->
+      <div class="drop-content" *ngIf="!isUploading">
+        <div class="drop-icon">📄</div>
+        <p class="drop-text">Drop your PDF here</p>
+        <p class="drop-or">or</p>
+        <label class="browse-btn">
+          Choose File
+          <input type="file" accept=".pdf" hidden (change)="onFileSelected($event)">
+        </label>
+        <p class="drop-hint">Only PDF files supported</p>
+      </div>
+
+      <!-- Uploading State -->
+      <div class="uploading-content" *ngIf="isUploading">
+        <div class="spinner"></div>
+        <p class="uploading-title">Processing your document...</p>
+        <p class="uploading-subtitle">
+          Extracting text, creating embeddings and indexing chunks
+        </p>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-msg" *ngIf="error">
+      ⚠️ {{ error }}
+    </div>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feature">
+        <span>🔍</span>
+        <p>Semantic Search</p>
+      </div>
+      <div class="feature">
+        <span>📍</span>
+        <p>Source Citations</p>
+      </div>
+      <div class="feature">
+        <span>⚡</span>
+        <p>Instant Answers</p>
+      </div>
+    </div>
+  </div>
+</div>
